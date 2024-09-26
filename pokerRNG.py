@@ -2,6 +2,7 @@
 import tkinter as tk 
 import customtkinter
 import random
+#test
 
 def generate_number():
     number = random.randint(1, 100)
