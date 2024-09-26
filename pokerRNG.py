@@ -2,7 +2,24 @@
 import tkinter as tk 
 import customtkinter
 import random
-#test
+
+def run_cycle():
+    if cycle_running:
+        rng_button.invoke()
+        root.after(4000, run_cycle)
+
+def toggle_cycle():
+    global cycle_running
+    if current_mode == "Timed mode off":
+        cycle_running = False
+    else:
+        cycle_running = True
+        run_cycle()
+
+def start_cycle():
+    if cycle_running:
+        generate_number()
+        root.after(4000, run_cycle)
 
 def generate_number():
     number = random.randint(1, 100)
@@ -16,15 +33,19 @@ def generate_number():
         rngnumber.configure(text_color="green")
 
 def timedmode_toggle():
+    global current_mode
+    global cycle_running
     current_mode = main_menu.entrycget(2, "label")
 
     if current_mode == "Timed mode off":
         main_menu.entryconfig(2, label="Timed mode on")
         main_menu.entryconfig(2, background="white", activebackground="white")
+        cycle_running = True
+        start_cycle()
+        
     else:
         main_menu.entryconfig(2, label="Timed mode off", background="#d9d8d8", activebackground="#edeced")
-
-    
+        cycle_running = False
     
 # Custom Tkinter theme
 customtkinter.set_appearance_mode("dark")
@@ -64,15 +85,14 @@ rngnumber.configure(text="", text_color="white", font=("Ubuntu", 95))
 rngnumber.pack(expand=True)
 
 # RNG Button to RNG the rngnumber
-button = customtkinter.CTkButton(frame,
+rng_button = customtkinter.CTkButton(frame,
                                  text="RNG",
                                  text_color="white", 
                                  font=("Ubuntu", 20), 
                                  width=150,
                                  height=50,
                                  command=generate_number)
-button.pack(side="bottom", fill="x")
-
+rng_button.pack(side="bottom", fill="x")
 root.mainloop()
 
 

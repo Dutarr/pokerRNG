@@ -10,7 +10,8 @@ Project is to build a own RNG app to use while playing poker.
 - Colored text, according to low or high RNG mode
 
 # Outline
-- Code the time frame default (4sec) 
+- Make comments 
+
 - Code the low and high RNG
     - Add orange color?
 - Code the change font size
