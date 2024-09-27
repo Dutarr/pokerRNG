@@ -3,6 +3,28 @@ import tkinter as tk
 import customtkinter
 import random
 
+# def low_rng_colors():
+#     if number < 26:
+#         rngnumber.configure(text_color="red")
+#     elif number < 76:
+#         rngnumber.configure(text_color="yellow")
+#     else:
+#         rngnumber.configure(text_color="green")
+
+def highrng_toggle():
+    global current_rngmode
+    global highrng_on
+    current_rngmode = main_menu.entrycget(1, "label")
+
+    if current_rngmode == "High RNG (off)":
+        main_menu.entryconfig(1, label="High RNG (on)")
+        main_menu.entryconfig(1, background="white", activebackground="white")
+        highrng_on = True
+        
+    else:
+        main_menu.entryconfig(1, label="High RNG (off)", background="#d9d8d8", activebackground="#edeced")
+        highrng_on = False
+
 def run_cycle():
     if cycle_running:
         rng_button.invoke()
@@ -25,26 +47,35 @@ def generate_number():
     number = random.randint(1, 100)
     rngnumber.configure(text=str(number)) 
 
-    if number < 26:
-        rngnumber.configure(text_color="red")
-    elif number < 76:
-        rngnumber.configure(text_color="yellow")
+    if highrng_on:
+        if number < 26:
+            rngnumber.configure(text_color="green")
+        elif number < 76:
+            rngnumber.configure(text_color="yellow")
+        else:
+            rngnumber.configure(text_color="red")
     else:
-        rngnumber.configure(text_color="green")
+
+        if number < 26:
+            rngnumber.configure(text_color="red")
+        elif number < 76:
+            rngnumber.configure(text_color="yellow")
+        else:
+            rngnumber.configure(text_color="green")
 
 def timedmode_toggle():
     global current_mode
     global cycle_running
     current_mode = main_menu.entrycget(2, "label")
 
-    if current_mode == "Timed mode off":
-        main_menu.entryconfig(2, label="Timed mode on")
+    if current_mode == "Timed mode (off)":
+        main_menu.entryconfig(2, label="Timed mode (on)")
         main_menu.entryconfig(2, background="white", activebackground="white")
         cycle_running = True
         start_cycle()
         
     else:
-        main_menu.entryconfig(2, label="Timed mode off", background="#d9d8d8", activebackground="#edeced")
+        main_menu.entryconfig(2, label="Timed mode (off)", background="#d9d8d8", activebackground="#edeced")
         cycle_running = False
     
 # Custom Tkinter theme
@@ -66,18 +97,12 @@ main_menu = tk.Menu(root)
 root.config(menu=main_menu)
 menu_font = ("Ubuntu", 8)
 
-# Create options menu
-options_menu = tk.Menu(main_menu, tearoff=False)
-main_menu.add_cascade(label = "Options", font=menu_font, menu=options_menu)
-
-# Create sub menu for RNG Mode
-rngmode_menu = tk.Menu(options_menu, tearoff=False)
-options_menu.add_cascade(label="RNG Mode", font=menu_font, menu=rngmode_menu)
-rngmode_menu.add_command(label="Low RNG", font=menu_font, command=lambda: print("Low RNG"))
-rngmode_menu.add_command(label="High RNG", font=menu_font, command=lambda: print("High RNG"))
+# Create High RNG button 
+# highrng_mode = tk.Menu(main_menu, tearoff=False)
+main_menu.add_command(label = "High RNG (off)", font=menu_font, command=highrng_toggle)
 
 # timedmode_menu = tk.Menu(main_menu, tearoff=False)
-main_menu.add_command(label="Timed mode off", font=menu_font, command=timedmode_toggle)
+main_menu.add_command(label="Timed mode (off)", font=menu_font, command=timedmode_toggle)
 
 # Label for the RNG number
 rngnumber = customtkinter.CTkLabel(frame)

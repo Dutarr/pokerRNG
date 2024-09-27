@@ -9,11 +9,8 @@ Project is to build a own RNG app to use while playing poker.
 - Basic RNG that has RNG button and timed refresh, with ability to change the refresh frq
 - Colored text, according to low or high RNG mode
 
-# Outline
-- Make comments 
-
-- Code the low and high RNG
-    - Add orange color?
+# ToDo
+- Code the time refresh menu
 - Code the change font size
 - Change colors to black and orange.
 
