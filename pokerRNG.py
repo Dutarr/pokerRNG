@@ -3,13 +3,7 @@ import tkinter as tk
 import customtkinter
 import random
 
-# def low_rng_colors():
-#     if number < 26:
-#         rngnumber.configure(text_color="red")
-#     elif number < 76:
-#         rngnumber.configure(text_color="yellow")
-#     else:
-#         rngnumber.configure(text_color="green")
+highrng_on = False
 
 def highrng_toggle():
     global current_rngmode
@@ -55,7 +49,6 @@ def generate_number():
         else:
             rngnumber.configure(text_color="red")
     else:
-
         if number < 26:
             rngnumber.configure(text_color="red")
         elif number < 76:
