@@ -1,9 +1,22 @@
 # imports
-import tkinter as tk 
+import tkinter as tk
+from tkinter import simpledialog
 import customtkinter
 import random
 
 highrng_on = False
+
+# def update_refresh_time():
+#     refresh_time_ms = selected_refreshtime.get()
+#     return refresh_time_ms
+
+def update_cycle():
+    global cycle_running
+    current_mode = main_menu.entrycget(2, "label")
+    if current_mode == "Timed mode (off)":
+        main_menu.entryconfig(2, label="Timed mode (on)")
+        main_menu.entryconfig(2, background="white", activebackground="white")
+        start_cycle()
 
 def highrng_toggle():
     global current_rngmode
@@ -19,23 +32,26 @@ def highrng_toggle():
         main_menu.entryconfig(1, label="High RNG (off)", background="#d9d8d8", activebackground="#edeced")
         highrng_on = False
 
-def run_cycle():
-    if cycle_running:
-        rng_button.invoke()
-        root.after(4000, run_cycle)
+# def run_cycle():
+#     global cycle_running
+#     cycle_running = True
+#     refresh_time_ms = selected_refreshtime.get()
+#     if cycle_running:
+#         rng_button.invoke()
+#         root.after(refresh_time_ms, run_cycle)
 
 def toggle_cycle():
     global cycle_running
-    if current_mode == "Timed mode off":
+    if current_mode == "Timed mode (off)":
         cycle_running = False
     else:
         cycle_running = True
-        run_cycle()
 
 def start_cycle():
+    refresh_time_ms = selected_refreshtime.get()
     if cycle_running:
         generate_number()
-        root.after(4000, run_cycle)
+        root.after(refresh_time_ms, start_cycle)
 
 def generate_number():
     number = random.randint(1, 100)
@@ -71,6 +87,12 @@ def timedmode_toggle():
         main_menu.entryconfig(2, label="Timed mode (off)", background="#d9d8d8", activebackground="#edeced")
         cycle_running = False
     
+def get_manual_refresh_time():
+    user_input = simpledialog.askinteger("Input", "Refresh time (sec)")
+    if user_input:
+       selected_refreshtime = user_input 
+
+
 # Custom Tkinter theme
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -88,14 +110,37 @@ frame.pack(fill=tk.BOTH, expand=True)
 # Create main menu
 main_menu = tk.Menu(root)
 root.config(menu=main_menu)
-menu_font = ("Ubuntu", 8)
+menu_font = ("Ubuntu", 7)
 
 # Create High RNG button 
-# highrng_mode = tk.Menu(main_menu, tearoff=False)
 main_menu.add_command(label = "High RNG (off)", font=menu_font, command=highrng_toggle)
 
-# timedmode_menu = tk.Menu(main_menu, tearoff=False)
+# Create Timemode toggle button
 main_menu.add_command(label="Timed mode (off)", font=menu_font, command=timedmode_toggle)
+
+# Create Timemode settings menu
+timedmode_settings = tk.Menu(main_menu, tearoff=False)
+
+# Create list of selectable refresh times
+main_menu.add_cascade(label="Refresh time", font=menu_font, menu=timedmode_settings)
+
+# Selected refresh time 
+selected_refreshtime = tk.IntVar(value=3000)
+# global refresh_time_ms
+# refresh_time_ms = selected_refreshtime.get()
+
+
+#Create Refresh times
+timedmode_settings.add_radiobutton(label="1sec", variable=selected_refreshtime, value=1000, command=update_cycle)
+timedmode_settings.add_radiobutton(label="2sec", variable=selected_refreshtime, value=2000, command=update_cycle)
+timedmode_settings.add_radiobutton(label="3sec", variable=selected_refreshtime, value=3000, command=update_cycle)
+timedmode_settings.add_radiobutton(label="4sec", variable=selected_refreshtime, value=4000, command=update_cycle)
+timedmode_settings.add_radiobutton(label="5sec", variable=selected_refreshtime, value=5000, command=update_cycle)
+timedmode_settings.add_radiobutton(label="6sec", variable=selected_refreshtime, value=6000, command=update_cycle)
+timedmode_settings.add_radiobutton(label="7sec", variable=selected_refreshtime, value=7000, command=update_cycle)
+timedmode_settings.add_radiobutton(label="8sec", variable=selected_refreshtime, value=8000, command=update_cycle)
+timedmode_settings.add_radiobutton(label="9sec", variable=selected_refreshtime, value=9000, command=update_cycle)
+timedmode_settings.add_radiobutton(label="Custom", variable=selected_refreshtime, value=selected_refreshtime)
 
 # Label for the RNG number
 rngnumber = customtkinter.CTkLabel(frame)
