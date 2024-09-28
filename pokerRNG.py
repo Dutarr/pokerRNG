@@ -1,14 +1,9 @@
 # imports
 import tkinter as tk
-from tkinter import simpledialog
 import customtkinter
 import random
 
 highrng_on = False
-
-# def update_refresh_time():
-#     refresh_time_ms = selected_refreshtime.get()
-#     return refresh_time_ms
 
 def update_cycle():
     global cycle_running
@@ -16,7 +11,11 @@ def update_cycle():
     if current_mode == "Timed mode (off)":
         main_menu.entryconfig(2, label="Timed mode (on)")
         main_menu.entryconfig(2, background="white", activebackground="white")
+        cycle_running = True
         start_cycle()
+    else:
+        pass
+
 
 def highrng_toggle():
     global current_rngmode
@@ -32,13 +31,12 @@ def highrng_toggle():
         main_menu.entryconfig(1, label="High RNG (off)", background="#d9d8d8", activebackground="#edeced")
         highrng_on = False
 
-# def run_cycle():
-#     global cycle_running
-#     cycle_running = True
-#     refresh_time_ms = selected_refreshtime.get()
-#     if cycle_running:
-#         rng_button.invoke()
-#         root.after(refresh_time_ms, run_cycle)
+def run_cycle():
+    global cycle_running
+    refresh_time_ms = selected_refreshtime.get()
+    if cycle_running:
+        rng_button.invoke()
+        root.after(refresh_time_ms, run_cycle)
 
 def toggle_cycle():
     global cycle_running
@@ -51,7 +49,7 @@ def start_cycle():
     refresh_time_ms = selected_refreshtime.get()
     if cycle_running:
         generate_number()
-        root.after(refresh_time_ms, start_cycle)
+        root.after(refresh_time_ms, run_cycle)
 
 def generate_number():
     number = random.randint(1, 100)
@@ -87,12 +85,6 @@ def timedmode_toggle():
         main_menu.entryconfig(2, label="Timed mode (off)", background="#d9d8d8", activebackground="#edeced")
         cycle_running = False
     
-def get_manual_refresh_time():
-    user_input = simpledialog.askinteger("Input", "Refresh time (sec)")
-    if user_input:
-       selected_refreshtime = user_input 
-
-
 # Custom Tkinter theme
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -125,10 +117,8 @@ timedmode_settings = tk.Menu(main_menu, tearoff=False)
 main_menu.add_cascade(label="Refresh time", font=menu_font, menu=timedmode_settings)
 
 # Selected refresh time 
+global selected_refreshtime
 selected_refreshtime = tk.IntVar(value=3000)
-# global refresh_time_ms
-# refresh_time_ms = selected_refreshtime.get()
-
 
 #Create Refresh times
 timedmode_settings.add_radiobutton(label="1sec", variable=selected_refreshtime, value=1000, command=update_cycle)
@@ -140,7 +130,6 @@ timedmode_settings.add_radiobutton(label="6sec", variable=selected_refreshtime, 
 timedmode_settings.add_radiobutton(label="7sec", variable=selected_refreshtime, value=7000, command=update_cycle)
 timedmode_settings.add_radiobutton(label="8sec", variable=selected_refreshtime, value=8000, command=update_cycle)
 timedmode_settings.add_radiobutton(label="9sec", variable=selected_refreshtime, value=9000, command=update_cycle)
-timedmode_settings.add_radiobutton(label="Custom", variable=selected_refreshtime, value=selected_refreshtime)
 
 # Label for the RNG number
 rngnumber = customtkinter.CTkLabel(frame)
