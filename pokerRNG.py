@@ -16,15 +16,17 @@ def focus_mode_toggle():
 
     if current_focusmode == "Focus mode (off)":
         popup_menu.entryconfig(0, label="Focus mode (on)")
-        popup_menu.entryconfig(0, background="white", activebackground="white")
+        toggle_borders()
         root.config(menu='')
-        root.overrideredirect(False)
         rng_button.pack_forget()
+        current_focusmode = "Focus mode (on)"
+
     else:
-        popup_menu.entryconfig(0, label="Focus mode (off)", background="#d9d8d8", activebackground="#edeced")
+        popup_menu.entryconfig(0, label="Focus mode (off)")
         root.config(menu=main_menu)
-        root.overrideredirect(True)
+        root.overrideredirect(False)
         rng_button.pack(side="bottom", fill="x")
+        current_focusmode = "Focus mode (off)"
 
 def toggle_menubar():
     if root.cget('menu') == '':
@@ -33,10 +35,13 @@ def toggle_menubar():
         root.config(menu='')
 
 def toggle_borders():
-    if root.overrideredirect():
+    global borders_hidden
+    if borders_hidden:
         root.overrideredirect(False)
+        borders_hidden = False
     else:
         root.overrideredirect(True)
+        borders_hidden = True
 
 def do_popup(event):
     try:
@@ -133,10 +138,6 @@ root = customtkinter.CTk()
 root.title("PokerRNG")
 root.geometry("250x200")
 root.attributes("-topmost", True)
-root.overrideredirect(False)
-
-icon = tk.PhotoImage(file="/home/dutarr/coding/pokerRNG/rng3_cropped_clean.png")
-root.iconphoto(True, icon)
 
 # Create the frame
 frame = customtkinter.CTkFrame(root)
@@ -194,7 +195,7 @@ rng_button.pack(side="bottom", fill="x")
 
 # Create popup menu
 popup_menu = tk.Menu(root, tearoff=False) 
-popup_menu.add_command(label="Focus Mode", command=focus_mode_toggle)
+popup_menu.add_command(label="Focus Mode (off)", command=focus_mode_toggle)
 popup_menu.add_command(label="Toggle borders", command=toggle_borders)
 popup_menu.add_command(label="Toggle menu", command=toggle_menubar)
 popup_menu.add_separator()
@@ -205,6 +206,8 @@ popup_menu.add_command(label="Exit", command=root.quit)
 
 # Bind right click for popup menu
 root.bind("<Button-3>", do_popup)
+current_focusmode = "Focus mode (off)"
+borders_hidden = False
 
 root.mainloop()
 
