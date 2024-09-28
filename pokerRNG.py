@@ -5,6 +5,45 @@ import random
 
 highrng_on = False
 
+def change_font_size(change):
+    global default_font_size
+    default_font_size += change
+    rng_number.configure(font=("Ubuntu", default_font_size))
+
+def focus_mode_toggle():
+    global current_focusmode
+    current_focusmode = popup_menu.entrycget(0, "label")
+
+    if current_focusmode == "Focus mode (off)":
+        popup_menu.entryconfig(0, label="Focus mode (on)")
+        popup_menu.entryconfig(0, background="white", activebackground="white")
+        root.config(menu='')
+        root.overrideredirect(False)
+        rng_button.pack_forget()
+    else:
+        popup_menu.entryconfig(0, label="Focus mode (off)", background="#d9d8d8", activebackground="#edeced")
+        root.config(menu=main_menu)
+        root.overrideredirect(True)
+        rng_button.pack(side="bottom", fill="x")
+
+def toggle_menubar():
+    if root.cget('menu') == '':
+        root.config(menu=main_menu)
+    else:
+        root.config(menu='')
+
+def toggle_borders():
+    if root.overrideredirect():
+        root.overrideredirect(False)
+    else:
+        root.overrideredirect(True)
+
+def do_popup(event):
+    try:
+        popup_menu.tk_popup(event.x_root, event.y_root)
+    finally:
+        popup_menu.grab_release()
+
 def update_cycle():
     global cycle_running
     current_mode = main_menu.entrycget(2, "label")
@@ -53,22 +92,22 @@ def start_cycle():
 
 def generate_number():
     number = random.randint(1, 100)
-    rngnumber.configure(text=str(number)) 
+    rng_number.configure(text=str(number)) 
 
     if highrng_on:
         if number < 26:
-            rngnumber.configure(text_color="green")
+            rng_number.configure(text_color="green")
         elif number < 76:
-            rngnumber.configure(text_color="yellow")
+            rng_number.configure(text_color="yellow")
         else:
-            rngnumber.configure(text_color="red")
+            rng_number.configure(text_color="red")
     else:
         if number < 26:
-            rngnumber.configure(text_color="red")
+            rng_number.configure(text_color="red")
         elif number < 76:
-            rngnumber.configure(text_color="yellow")
+            rng_number.configure(text_color="yellow")
         else:
-            rngnumber.configure(text_color="green")
+            rng_number.configure(text_color="green")
 
 def timedmode_toggle():
     global current_mode
@@ -94,6 +133,7 @@ root = customtkinter.CTk()
 root.title("RNG")
 root.geometry("250x200")
 root.attributes("-topmost", True)
+root.overrideredirect(False)
 
 # Create the frame
 frame = customtkinter.CTkFrame(root)
@@ -132,19 +172,37 @@ timedmode_settings.add_radiobutton(label="8sec", variable=selected_refreshtime, 
 timedmode_settings.add_radiobutton(label="9sec", variable=selected_refreshtime, value=9000, command=update_cycle)
 
 # Label for the RNG number
-rngnumber = customtkinter.CTkLabel(frame)
-rngnumber.configure(text="", text_color="white", font=("Ubuntu", 95))
-rngnumber.pack(expand=True)
+default_font_size = 95 
+rng_number = customtkinter.CTkLabel(frame)
+rng_number.configure(text="", text_color="white", font=("Ubuntu", default_font_size))
+rng_number.pack(expand=True)
 
 # RNG Button to RNG the rngnumber
 rng_button = customtkinter.CTkButton(frame,
                                  text="RNG",
                                  text_color="white", 
-                                 font=("Ubuntu", 20), 
+                                 font=("Ubuntu", 30), 
                                  width=150,
                                  height=50,
+                                 fg_color="#b87d02",
+                                 hover_color="#976807",
                                  command=generate_number)
 rng_button.pack(side="bottom", fill="x")
+
+# Create popup menu
+popup_menu = tk.Menu(root, tearoff=False) 
+popup_menu.add_command(label="Focus Mode", command=focus_mode_toggle)
+popup_menu.add_command(label="Toggle borders", command=toggle_borders)
+popup_menu.add_command(label="Toggle menu", command=toggle_menubar)
+popup_menu.add_separator()
+popup_menu.add_command(label="Increase font", command=lambda:change_font_size(+20))
+popup_menu.add_command(label="Decrease font", command=lambda:change_font_size(-20))
+popup_menu.add_separator()
+popup_menu.add_command(label="Exit", command=root.quit)
+
+# Bind right click for popup menu
+root.bind("<Button-3>", do_popup)
+
 root.mainloop()
 
 

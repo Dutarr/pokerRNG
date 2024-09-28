@@ -10,7 +10,5 @@ Project is to build a own RNG app to use while playing poker.
 - Colored text, according to low or high RNG mode
 
 # ToDo
-- Code the time refresh menu
 - Code the change font size
-- Change colors to black and orange.
 
