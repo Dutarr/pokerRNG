@@ -1,14 +1,11 @@
-Project is to build a own RNG app to use while playing poker.
+PokerRNG App
 
-# Things to learn from the project 
-- How to start simple python project
-- How to make python GUI project
-- How to code in neovim, learn more and more vim motions
+This is a simple Random Number Generator for Poker players.
 
-# Functionality
-- Basic RNG that has RNG button and timed refresh, with ability to change the refresh frq
-- Colored text, according to low or high RNG mode
+- Low and High RNG color modes.
+- Automatic Timed Mode, with settings from 1 to 9 seconds; 1 second incriments.
+- Right click popup menu, where you can access Focus Mode, hide windows borders and top menu bar. 
 
-# ToDo
-- Code the change font size
+
+
 

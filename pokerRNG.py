@@ -130,10 +130,13 @@ customtkinter.set_default_color_theme("dark-blue")
 
 # Create main window
 root = customtkinter.CTk()
-root.title("RNG")
+root.title("PokerRNG")
 root.geometry("250x200")
 root.attributes("-topmost", True)
 root.overrideredirect(False)
+
+icon = tk.PhotoImage(file="/home/dutarr/coding/pokerRNG/rng3_cropped_clean.png")
+root.iconphoto(True, icon)
 
 # Create the frame
 frame = customtkinter.CTkFrame(root)
